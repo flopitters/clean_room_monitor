@@ -40,19 +40,6 @@ ifconfig -a
 Look for something that looks like wlan0 and eth0. These are the network ports. Note down the MAC address of both. It looks something like '8b:ae:27:38:4d'. Head to https://network.cern.ch to register your device with the right MAC addresses you found with the above commend. Make sure you add the wifi and the ethernet interface. Reboot the RPI (it might take a few minutes until the registration is done). Open a browser and finish the registration. You may need to reboot again. (If you know of a way to do this without the need to hook up a monitor, please let me know.) 
 
 
-## Further setup
-
-Add user to access group for serial
-```bash
-sudo usermod -a -G dialout $USER
-```
-
-Add cron job
-```bash
-
-```
-
-
 ## Setup Humidity Monitor
 
 Sensor: DHT22
@@ -93,3 +80,17 @@ git clone https://github.com/adafruit/Adafruit_Python_BMP adafruit_bmp
 cd adafruit_bmp
 sudo python setup.py install
 ```
+
+
+## Further setup
+
+Add user to access group for serial
+```bash
+sudo usermod -a -G dialout $USER
+```
+
+Add cron job
+```bash
+
+```
+
