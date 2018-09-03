@@ -20,10 +20,9 @@
 # ============================================================================
 
 import time, os, sys
-import devices
-#import Adafruit_DHT as dht
-#import Adafruit_BMP as bmp
-
+import dc1700 as dc
+import Adafruit_DHT as dht22
+import Adafruit_BMP.BMP085 as bmp085
 
 
 class clean_room_monitor(object):
@@ -31,22 +30,24 @@ class clean_room_monitor(object):
 
     def initialise(self):
 
-        self.hum_meter_pin = 24         # gpio pin of humidity monitor
-        self.mano_meter_pin = 17        # gpio pin of pressure monitor
-        self.counter_address = 'COM3'   # serial port particle counter
+        self.hum_meter_pin = 4                  # gpio pin of humidity monitor
+        self.mano_meter_pin = 7                 # gpio pin of pressure monitor
+        self.counter_address = '/dev/ttyUSB0'   # serial port particle counter
 
-        self.wait = 10                 # delay between measurements in [s]
+        self.wait = 10                          # time between measurements
+                                                # keep in mind that the pc measurement takes 60s
 
 
     def execute(self):
         fContinous = 1
+        fSingle = 1
+        fPrint = 1
 
         try:
             while fContinous:
                 ## Set up devices
-                # dc1700 = dc1700(self.counter_address)
-                # dht22 = dht.DHT22
-                # bmp186 = bmp.BMP085.BMP085()
+                dc1700 = dc.dc1700(self.counter_address)
+                #bmp180 = bmp085.BMP085()
 
                 ## Prepare
                 hd = '# Date | Time | Temperature [C] | Humidity [%]| | Pressure [Bar] | Particles > 0.5 um [m^-3] | Particles > 2.5 um [m^-3] | ISO | Class\n'
@@ -54,14 +55,11 @@ class clean_room_monitor(object):
                 ## Read measurements
                 date = time.strftime("%Y/%m/%d", time.localtime())
                 clock = time.strftime("%H:%M:%S", time.localtime())
-                #hum, temp = dht.read_retry(22, self.hum_meter_pin)
-                #pres = bmp186.read_pressure()
-                #cnt05, cnt25 = dc1700.read()
-
-                hum = temp = pres = cnt05 = cnt25 = -1
-
-                time.sleep(0.001)
-
+                hum, temp = dht22.read_retry(22, self.hum_meter_pin)
+                #pres = bmp180.read_pressure()
+                cnt05, cnt25 = dc1700.read_particle_counts() # takes 60s of integration time
+                pres = -1
+                
                 ## Determine cleanroom class from particle count
                 if (cnt05 < 352000 and cnt25 < 11720):
                     iso = 7
@@ -77,11 +75,15 @@ class clean_room_monitor(object):
 
                 ## Print feedback
                 if fPrint:
-                    print '{:s}  {:s}  {:3.1f}%  {:3.1f}C  {:d}  {:d}  {:d}  {:d}  {:d}'.format(*line)
+                    print '{:s}  {:s}  {:3.1f}%  {:3.1f}C  {:d}  {:.0f}  {:.0f}  {:d}  {:d}'.format(*line)
 
                 ## One file per day
                 file_name = time.strftime("%Y_%m_%d", time.localtime())
 
+                ## Create log folder if it dpes not already exist
+                if not (os.path.isdir('logs/')):
+                    os.makedirs('logs')
+                
                 ## Create file if it does not already exists
                 if not (os.path.isfile('logs/' + file_name + '.txt')):
                     file = open('logs/' + file_name + '.txt', 'w')
@@ -90,18 +92,18 @@ class clean_room_monitor(object):
 
                 ## Append file
                 file = open('logs/' + file_name + '.txt', 'a')
-                file.write('{:s}  {:s}  {:3.1f}%  {:3.1f}C  {:d}  {:d}  {:d}  {:d}  {:d}\n'.format(*line))
+                file.write('{:s}  {:s}  {:3.1f}%  {:3.1f}C  {:d}  {:.0f}  {:.0f}  {:d}  {:d}\n'.format(*line))
                 file.close()
-
+                
                 if fSingle:
                     fContinous = 0
+                else:
+                    time.sleep(self.wait)
 
 
-
-
-            ## Break if keyboard interrupt
-            except KeyboardInterrupt:
-                print "Keyboard interrupt." #self.logging.error("Keyboard interrupt.")
+        ## Break if keyboard interrupt
+        except KeyboardInterrupt:
+            print "Keyboard interrupt." #self.logging.error("Keyboard interrupt.")
 
 
 
