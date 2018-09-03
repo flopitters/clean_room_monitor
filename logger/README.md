@@ -6,7 +6,7 @@ A repo for raspberry pi based monitor for a clean room. Made for a DHT22 humidit
 
 Follow the instructions here to set up your RPi https://ubuntu-mate.org/raspberry-pi/ or https://www.raspberrypi.org/learning/software-guide/quickstart/. You can also use etcher to write the image to the sd card.
 
-Connect a power supply, monitor, keyboard and mouse. Boot up the RPi and finish the installation. Don't forget to active ssh, gpio's and serial access from remote.
+Connect a power supply, monitor, keyboard and mouse. Boot up the RPi and finish the installation. Don't forget to active ssh, i2c, gpio's and serial access from remote.
 ```bash
 raspi-config
 ```
