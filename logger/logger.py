@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 
 # ============================================================================
 # File: logger.py
@@ -17,6 +17,8 @@
 # ============================================================================
 
 import time, os, sys
+from optparse import OptionParser
+
 import dc1700 as dc
 import Adafruit_DHT as dht22
 import Adafruit_BMP.BMP085 as bmp085
