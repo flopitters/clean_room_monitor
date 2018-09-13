@@ -93,6 +93,8 @@ sudo usermod -a -G dialout $USER
 
 Add cron job
 ```bash
+crontab -e
+*/10 * * * * /home/hgsensor/Applications/clean_room_monitor/logger
 
 ```
 
