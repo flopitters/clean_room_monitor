@@ -25,7 +25,9 @@ import Adafruit_BMP.BMP085 as bmp085
 class clean_room_monitor(object):
     """ Log humidty, temperature, pressure and particle count. """
 
-    def initialise(self):
+    def initialise(self, dat_path):
+
+        self.dat_path = dat_path                # data path
 
         self.hum_meter_pin = 4                  # gpio pin of humidity monitor
         self.mano_meter_pin = 7                 # gpio pin of pressure monitor
@@ -89,17 +91,17 @@ class clean_room_monitor(object):
                 file_name = time.strftime("%Y_%m_%d", time.localtime())
 
                 ## Create log folder if it dpes not already exist
-                if not (os.path.isdir('logs/')):
-                    os.makedirs('logs')
+                if not (os.path.isdir(dat_path)):
+                    os.makedirs(dat_path)
 
                 ## Create file if it does not already exists
-                if not (os.path.isfile('logs/' + file_name + '.txt')):
-                    file = open('logs/' + file_name + '.txt', 'w')
+                if not (os.path.isfile(dat_path + '/' + file_name + '.txt')):
+                    file = open(dat_path + '/' + file_name + '.txt', 'w')
                     file.write(hd)
                     file.close()
 
                 ## Append file
-                file = open('logs/' + file_name + '.txt', 'a')
+                file = open(dat_path + '/' + file_name + '.txt', 'a')
                 file.write('{:s}  {:s}  {:3.1f}  {:3.1f}  {:d}  {:.0f}  {:.0f}  {:d}  {:d}\n'.format(*line))
                 file.close()
 
@@ -115,8 +117,23 @@ class clean_room_monitor(object):
 
 
 
-if __name__=="__main__":
 
-    run = clean_room_monitor()
+# Main app
+# -------------------------------------
+
+def main():
+    usage = "usage: ./logger.py -d [data_path]"
+
+    parser = OptionParser(usage=usage, version="prog 0.01")
+    parser.add_option("-d", "--dat_path", action="store", dest="dat_path", type="string", default="logs/",  help="data path")
+
+    (options, args) = parser.parse_args()
+    if not (options.dat_path):
+	       parser.error("You need to give a data path. Try '-h' for more info.")
+
+    run = clean_room_monitor(options.dat_path)
     run.initialise()
     run.execute()
+
+if __name__=="__main__":
+	main()

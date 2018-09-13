@@ -2,6 +2,7 @@
 
 A repo for raspberry pi based monitor for a clean room. Made for a DHT22 humidity sensor, BMP180 pressure sensor and Dylas DC1700 dust monitor.
 
+
 ## Setup the RPi
 
 Follow the instructions here to set up your RPi https://ubuntu-mate.org/raspberry-pi/ or https://www.raspberrypi.org/learning/software-guide/quickstart/. You can also use etcher to write the image to the sd card.
@@ -10,14 +11,14 @@ Connect a power supply, monitor, keyboard and mouse. Boot up the RPi and finish 
 ```bash
 raspi-config
 ```
-Add some useful software and remove the bloatware. 
+Add some useful software and remove the bloatware.
 ```bash
 # Update
 sudo apt-get update
 sudo apt-get upgrade
 sudo apt-get dist-upgrade
 
-# Some useful software 
+# Some useful software
 sudo apt-get install make cmake emacs git gnuplot build-essential
 sudo apt-get install python-numpy python-scipy python-matplotlib python-pandas python-gnuplot python-serial python-pyvisa python-dev
 
@@ -37,7 +38,7 @@ Hook up the RPI to a monitor and keyboard. Start a terminal and type
 ifconfig -a
 ```
 
-Look for something that looks like wlan0 and eth0. These are the network ports. Note down the MAC address of both. It looks something like '8b:ae:27:38:4d'. Head to https://network.cern.ch to register your device with the right MAC addresses you found with the above commend. Make sure you add the wifi and the ethernet interface. Reboot the RPI (it might take a few minutes until the registration is done). Open a browser and finish the registration. You may need to reboot again. (If you know of a way to do this without the need to hook up a monitor, please let me know.) 
+Look for something that looks like wlan0 and eth0. These are the network ports. Note down the MAC address of both. It looks something like '8b:ae:27:38:4d'. Head to https://network.cern.ch to register your device with the right MAC addresses you found with the above commend. Make sure you add the wifi and the ethernet interface. Reboot the RPI (it might take a few minutes until the registration is done). Open a browser and finish the registration. You may need to reboot again. (If you know of a way to do this without the need to hook up a monitor, please let me know.)
 
 
 ## Setup Humidity Monitor
@@ -89,8 +90,13 @@ Add user to access group for serial
 sudo usermod -a -G dialout $USER
 ```
 
+
 Add cron job
 ```bash
 
 ```
 
+
+## Example
+
+./logger.py -d ../data

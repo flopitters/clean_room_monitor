@@ -217,23 +217,17 @@ def main():
     usage = "usage: ./monitor.py -d [data_path]"
 
     parser = OptionParser(usage=usage, version="prog 0.01")
-    parser.add_option("-d", "--dat_path", action="store_true", dest="list_tests", default="logs/",  help="data path")
+    parser.add_option("-d", "--dat_path", action="store", dest="dat_path", type="string", default="logs/",  help="data path")
 
     (options, args) = parser.parse_args()
-    if len(args) < 1:
+    if not (options.dat_path):
 	       parser.error("You need to give a data path. Try '-h' for more info.")
 
-    id = args[0]
-
-    dat_path = '/Users/Home/Documents/Works/rpi/monitor/data/'
-    if len(args) > 1:
-        if id == d:
-            dat_path = args[1]
-
     app = wx.App()
-    app.frame = mainFrame(dat_path)
+    app.frame = mainFrame(options.dat_path)
     app.frame.Show()
     app.MainLoop()
+
 
 if __name__=="__main__":
 	main()
