@@ -1,19 +1,16 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 # ============================================================================
-# File: monitor.py
+# File: logger.py
 # ------------------------------
 #
 # Clean room monitor based on rpi with dht22, bmp186 and dc17000.
 #
 # Notes:
-#   -
-#
-# Layout:
-#   configure and prepare
+#   - Dylos DC1700 takes 60 second to integrate
 #
 # Status:
-#   in progress
+#   works well
 #
 # Author: Florian Pitters
 #

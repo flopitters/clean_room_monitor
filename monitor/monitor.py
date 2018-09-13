@@ -1,7 +1,26 @@
+#!/usr/bin/env python
+
+# ============================================================================
+# File: monitor.py
+# ------------------------------
+#
+# Clean room monitor based on rpi with dht22, bmp186 and dc17000.
+#
+# Notes:
+#   -
+#
+# Status:
+#   basic functionality is there
+#
+# Author: Florian Pitters
+#
+# ============================================================================
+
 import os
 import sys
 import wx
 import time
+from optparse import OptionParser
 
 import numpy as np
 import matplotlib as mpl
@@ -50,11 +69,11 @@ class mainFrame(wx.Frame):
 
     title = 'Clean room monitor'
 
-    def __init__(self):
+    def __init__(self, dat_path):
         wx.Frame.__init__(self, None, -1, self.title, size=(800,650))
 
         self.plots = []
-        self.paused = 0
+        self.dat_path = dat_path
 
         # Main GUI
         self.create_menu()
@@ -149,14 +168,13 @@ class mainFrame(wx.Frame):
 
     def update(self):
         data = np.array([])
-        data_path = "/Users/Home/Documents/Works/rpi/monitor/data/"
-        file_list =  [f for f in os.listdir(data_path) if (os.path.isfile(os.path.join(data_path, f)) and ('.txt' in f))]
+        file_list =  [f for f in os.listdir(self.dat_path) if (os.path.isfile(os.path.join(self.dat_path, f)) and ('.txt' in f))]
 
         # TODO: Reads all 30 files everytime. Better: Check if new file and if not only re-read last one.
 
         k = 0
         for f in file_list[-30:]:
-            d = np.genfromtxt(data_path + f, comments='#', dtype=[('date', 'S10'), ('time', 'S8'), ('temp', '<f8'), ('hum', '<f8'), ('pres', '<i8'), ('cnt5', '<i8'), ('cnt25', '<i8'), ('iso', '<i8'), ('class', '<i8')])
+            d = np.genfromtxt(self.dat_path + f, comments='#', dtype=[('date', 'S10'), ('time', 'S8'), ('temp', '<f8'), ('hum', '<f8'), ('pres', '<i8'), ('cnt5', '<i8'), ('cnt25', '<i8'), ('iso', '<i8'), ('class', '<i8')])
             if k == 0:
                 data = d
             else:
@@ -195,8 +213,27 @@ class mainFrame(wx.Frame):
 # Main app
 # -------------------------------------
 
-if __name__ == '__main__':
+def main():
+    usage = "usage: ./monitor.py -d [data_path]"
+
+    parser = OptionParser(usage=usage, version="prog 0.01")
+    parser.add_option("-d", "--dat_path", action="store_true", dest="list_tests", default="logs/",  help="data path")
+
+    (options, args) = parser.parse_args()
+    if len(args) < 1:
+	       parser.error("You need to give a data path. Try '-h' for more info.")
+
+    id = args[0]
+
+    dat_path = '/Users/Home/Documents/Works/rpi/monitor/data/'
+    if len(args) > 1:
+        if id == d:
+            dat_path = args[1]
+
     app = wx.App()
-    app.frame = mainFrame()
+    app.frame = mainFrame(dat_path)
     app.frame.Show()
     app.MainLoop()
+
+if __name__=="__main__":
+	main()
