@@ -91,8 +91,17 @@ class mainFrame(wx.Frame):
     def create_main_panel(self):
         self.panel = wx.Panel(self)
 
+        self.timer = wx.Timer(self)
+        self.Bind(wx.EVT_TIMER, self.on_update, self.timer)
+
         self.update_button = wx.Button(self, -1, label="Update", size=(60,20), pos=(370, 600))
         self.update_button.Bind(wx.EVT_BUTTON, self.on_update)
+
+        self.start_button = wx.Button(self, -1, label="Start", size=(60,20), pos=(300, 600))
+        self.start_button.Bind(wx.EVT_BUTTON, self.on_start)
+
+        self.stop_button = wx.Button(self, -1, label="Stop", size=(60,20), pos=(440, 600))
+        self.stop_button.Bind(wx.EVT_BUTTON, self.on_stop)
 
         self.tab_temp = wx.Notebook(self, -1, style=0, size=(400,300), pos=(0,0))
         self.sheet_temp1 = self.add_plot(self.tab_temp, 1, "Last 24 hours")
@@ -120,27 +129,16 @@ class mainFrame(wx.Frame):
 
 
     def on_start(self, event):
-        self.paused = 0
+        self.timer.Start(3000)
 
     def on_stop(self, event):
-        self.paused = 1
+        self.timer.Stop()
 
     def on_exit(self, event):
         self.Destroy()
 
     def on_update(self, event):
         self.update()
-
-
-    def on_toggle(self, event):
-        if self.timer.IsRunning():
-            self.timer.Stop()
-            self.toggle_button.SetLabel("Start")
-            print "timer stopped!"
-        else:
-            print "starting timer..."
-            self.timer.Start(30000)
-            self.toggle_button.SetLabel("Stop")
 
 
     def add_plot(self, tab, id, name="plot"):
