@@ -59,7 +59,7 @@ class clean_room_monitor(object):
                 hd = '# Date | Time | Temperature [C] | Humidity [%]| | Pressure [Bar] | Particles > 0.5 um [m^-3] | Particles > 2.5 um [m^-3] | ISO | Class\n'
 
                 ## Read measurements
-                date = time.strftime("%Y/%m/%d", time.localtime())
+                date = time.strftime("%Y-%m-%d", time.localtime())
                 clock = time.strftime("%H:%M:%S", time.localtime())
 
                 hum = temp = pres = cnt05 = cnt25 = -1
@@ -86,7 +86,7 @@ class clean_room_monitor(object):
 
                 ## Print feedback
                 if fPrint:
-                    print '{:s}  {:s}  {:3.1f}%  {:3.1f}C  {:d}  {:.0f}  {:.0f}  {:d}  {:d}'.format(*line)
+                    print '{:s}  {:s}  {:3.1f}  {:3.1f}  {:d}  {:.0f}  {:.0f}  {:d}  {:d}'.format(*line)
 
                 ## One file per day
                 file_name = time.strftime("%Y_%m_%d", time.localtime())
@@ -103,7 +103,7 @@ class clean_room_monitor(object):
 
                 ## Append file
                 file = open('logs/' + file_name + '.txt', 'a')
-                file.write('{:s}  {:s}  {:3.1f}%  {:3.1f}C  {:d}  {:.0f}  {:.0f}  {:d}  {:d}\n'.format(*line))
+                file.write('{:s}  {:s}  {:3.1f}  {:3.1f}  {:d}  {:.0f}  {:.0f}  {:d}  {:d}\n'.format(*line))
                 file.close()
 
                 if fSingle:
