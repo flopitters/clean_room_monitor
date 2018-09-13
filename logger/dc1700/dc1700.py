@@ -28,10 +28,9 @@ class dc1700(object):
 
     def query(self, cmd, debug=0):
         out = ''
-        time.sleep(60)
+        time.sleep(70)
         self.ctrl.write(cmd + self.termination)
         while self.ctrl.inWaiting() > 0:
-            #print self.ctrl.read(1)
             out += self.ctrl.read(1)
             if debug:
                 print ">> " + out
@@ -41,7 +40,15 @@ class dc1700(object):
         ret = self.query("D", debug=0)
         ret = ret.split(',')
 
-        val1 = float(ret[-2])
-        val2 = float(ret[-1])
-        
+        if debug:
+            print ret
+            print ret[-1]
+            print ret[-2]
+        try:
+            val1 = float(ret[-2])
+            val2 = float(ret[-1])
+        except ValueError:
+            val1 = -1
+            val2 = -1
+            
         return val1, val2

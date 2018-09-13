@@ -27,7 +27,7 @@ import Adafruit_BMP.BMP085 as bmp085
 class clean_room_monitor(object):
     """ Log humidty, temperature, pressure and particle count. """
 
-    def initialise(self, dat_path):
+    def __init__(self, dat_path):
 
         self.dat_path = dat_path                # data path
 
@@ -35,9 +35,9 @@ class clean_room_monitor(object):
         self.mano_meter_pin = 7                 # gpio pin of pressure monitor
         self.counter_address = '/dev/ttyUSB0'   # serial port particle counter
 
-        self.use_dht22 = 0                      # flag if dht is connected
-        self.use_bmp180 = 0                     # flag if bmp is connected
-        self.use_dc1700 = 0                     # flag if dylos is connected
+        self.use_dht22 = 1                      # flag if dht is connected
+        self.use_bmp180 = 1                     # flag if bmp is connected
+        self.use_dc1700 = 1                     # flag if dylos is connected
 
         self.wait = 10                          # time between measurements
                                                 # keep in mind that the pc measurement takes 60s
@@ -93,17 +93,17 @@ class clean_room_monitor(object):
                 file_name = time.strftime("%Y_%m_%d", time.localtime())
 
                 ## Create log folder if it dpes not already exist
-                if not (os.path.isdir(dat_path)):
-                    os.makedirs(dat_path)
+                if not (os.path.isdir(self.dat_path)):
+                    os.makedirs(self.dat_path)
 
                 ## Create file if it does not already exists
-                if not (os.path.isfile(dat_path + '/' + file_name + '.txt')):
-                    file = open(dat_path + '/' + file_name + '.txt', 'w')
+                if not (os.path.isfile(self.dat_path + '/' + file_name + '.txt')):
+                    file = open(self.dat_path + '/' + file_name + '.txt', 'w')
                     file.write(hd)
                     file.close()
 
                 ## Append file
-                file = open(dat_path + '/' + file_name + '.txt', 'a')
+                file = open(self.dat_path + '/' + file_name + '.txt', 'a')
                 file.write('{:s}  {:s}  {:3.1f}  {:3.1f}  {:d}  {:.0f}  {:.0f}  {:d}  {:d}\n'.format(*line))
                 file.close()
 
@@ -134,7 +134,6 @@ def main():
 	       parser.error("You need to give a data path. Try '-h' for more info.")
 
     run = clean_room_monitor(options.dat_path)
-    run.initialise()
     run.execute()
 
 if __name__=="__main__":
