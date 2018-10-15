@@ -44,10 +44,14 @@ class dc1700(object):
             print ret
             print ret[-1]
             print ret[-2]
-        try:
-            val1 = float(ret[-2])
-            val2 = float(ret[-1])
-        except ValueError:
+        if len(ret) > 1:
+            try:
+                val1 = float(ret[-2])
+                val2 = float(ret[-1])
+            except ValueError:
+                val1 = -1
+                val2 = -1
+        else:
             val1 = -1
             val2 = -1
             
