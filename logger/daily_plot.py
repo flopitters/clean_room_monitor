@@ -3,13 +3,11 @@ import time
 import datetime
 import numpy as np
 import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
 plt.rcParams['figure.figsize'] = (16, 10)
-plt.rcParams['font.size'] = 12
-plt.rcParams['font.family'] = 'sans-serif'
-plt.rcParams['font.sans-serif'] = 'arial'
 plt.rcParams['axes.linewidth'] = 1.5
 plt.rcParams['axes.grid'] = True
 plt.rcParams['grid.linestyle'] = '--'
@@ -18,7 +16,7 @@ plt.rcParams['grid.alpha'] = 0.8
 plt.rcParams['xtick.direction'] = 'in'
 plt.rcParams['ytick.direction'] = 'in'
 
-dat_path = "/Users/Home/Documents/Works/rpi/monitor/data/"
+dat_path = "/home/hgsensor/Applications/clean_room_monitor/data/"
 
 file_list = [f for f in os.listdir(dat_path) \
             if (os.path.isfile(os.path.join(dat_path, f)) and ('.txt' in f))]
