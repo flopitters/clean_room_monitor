@@ -43,8 +43,9 @@ for f in sorted(file_list):
         for key in ['temp', 'hum', 'pres', 'cnt5']:
             y = dat[key]
             axes[j%2, j/2].xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M'))
+            axes[j%2, j/2].xaxis.set_major_locator(mdates.HourLocator(interval=4))
             axes[j%2, j/2].plot(x, y, ls=' ', ms=1, marker='o', mfc="k", mec="k")
-            
+                                                   
             if (key == 'temp'):
                 axes[j%2, j/2].set_ylim([18, 28])
                 axes[j%2, j/2].set_ylabel('temperature [C]')
@@ -57,6 +58,8 @@ for f in sorted(file_list):
             elif (key == 'cnt5'):
                 axes[j%2, j/2].set_ylim([0, 100])
                 axes[j%2, j/2].set_ylabel('# particles > 0.5 um / inch^3 [-]')
+                axes[j%2, j/2].axhline(y=6, linewidth=1.5, color='b')
+                axes[j%2, j/2].axhline(y=60, linewidth=2, color='r')
             
             plt.gcf().autofmt_xdate()
             j += 1

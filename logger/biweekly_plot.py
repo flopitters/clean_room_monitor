@@ -19,9 +19,8 @@ plt.rcParams['ytick.direction'] = 'in'
 dat_path = "/home/hgsensor/Applications/clean_room_monitor/data/"
 
 dat = []
-file_list = [f for f in os.listdir(dat_path) \
-            if (os.path.isfile(os.path.join(dat_path, f)) and ('.txt' in f))]
-
+file_list = sorted([f for f in os.listdir(dat_path) \
+            if (os.path.isfile(os.path.join(dat_path, f)) and ('.txt' in f))])
 
 ## Load only last 14 days
 for f in file_list[-14:]:
@@ -62,6 +61,8 @@ for key in ['temp', 'hum', 'pres', 'cnt5']:
     elif (key == 'cnt5'):
         axes[j%2, j/2].set_ylim([0, 100])
         axes[j%2, j/2].set_ylabel('# particles > 0.5 um / inch^3 [-]')
+        axes[j%2, j/2].axhline(y=6, linewidth=1.5, color='b')
+        axes[j%2, j/2].axhline(y=60, linewidth=2, color='r')
     plt.gcf().autofmt_xdate()
     j += 1
 
