@@ -34,9 +34,9 @@ class clean_room_monitor(object):
         self.mano_meter_pin = 7                 # gpio pin of pressure monitor
         self.counter_address = '/dev/ttyUSB0'   # serial port particle counter
 
-        self.use_dht22 = 0                      # flag if dht is connected
-        self.use_bmp180 = 0                     # flag if bmp is connected
-        self.use_dc1700 = 0                     # flag if dylos is connected
+        self.use_dht22 = 1                      # flag if dht is connected
+        self.use_bmp180 = 1                     # flag if bmp is connected
+        self.use_dc1700 = 1                     # flag if dylos is connected
 
         self.wait = 10                          # time between measurements
                                                 # keep in mind that the pc measurement takes 60s
@@ -65,7 +65,7 @@ class clean_room_monitor(object):
                 hum = temp = pres = cnt05 = cnt25 = -1
 
                 if self.use_dht22:
-		            hum, temp = dht22.read_retry(22, self.hum_meter_pin)
+		    hum, temp = dht22.read_retry(22, self.hum_meter_pin)
                 if self.use_bmp180:
                     pres = bmp180.read_pressure()
                 if self.use_dc1700:
