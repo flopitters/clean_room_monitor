@@ -25,11 +25,13 @@ import Adafruit_DHT as dht22
 import Adafruit_BMP.BMP085 as bmp085
 
 
-class clean_room_monitor(object):
+class clean_room_monitor:
     """ Log humidty, temperature, pressure and particle count. """
 
+    def __init__(self,dat_path):
+        self.dat_path = dat_path        
+        
     def initialise(self):
-
         self.hum_meter_pin = 4                  # gpio pin of humidity monitor
         self.mano_meter_pin = 7                 # gpio pin of pressure monitor
         self.counter_address = '/dev/ttyUSB0'   # serial port particle counter
@@ -59,7 +61,7 @@ class clean_room_monitor(object):
                 hd = '# Date | Time | Temperature [C] | Humidity [%]| | Pressure [Bar] | Particles > 0.5 um [m^-3] | Particles > 2.5 um [m^-3] | ISO | Class\n'
 
                 ## Read measurements
-                date = time.strftime("%Y/%m/%d", time.localtime())
+                date = time.strftime("%Y-%m-%d", time.localtime())
                 clock = time.strftime("%H:%M:%S", time.localtime())
 
                 hum = temp = pres = cnt05 = cnt25 = -1
@@ -96,13 +98,13 @@ class clean_room_monitor(object):
                     os.makedirs('logs')
 
                 ## Create file if it does not already exists
-                if not (os.path.isfile('logs/' + file_name + '.txt')):
-                    file = open('logs/' + file_name + '.txt', 'w')
+                if not (os.path.isfile(self.dat_path + file_name + '.txt')):
+                    file = open(self.dat_path  + file_name + '.txt', 'w')
                     file.write(hd)
                     file.close()
 
                 ## Append file
-                file = open('logs/' + file_name + '.txt', 'a')
+                file = open(self.dat_path + file_name + '.txt', 'a')
                 file.write('{:s}  {:s}  {:3.1f}%  {:3.1f}C  {:d}  {:.0f}  {:.0f}  {:d}  {:d}\n'.format(*line))
                 file.close()
 
@@ -120,6 +122,7 @@ class clean_room_monitor(object):
 
 if __name__=="__main__":
 
-    run = clean_room_monitor()
+    dat_path = '/home/hgsensor/Applications/clean_room_monitor/data/'
+    run = clean_room_monitor(dat_path)
     run.initialise()
     run.execute()
