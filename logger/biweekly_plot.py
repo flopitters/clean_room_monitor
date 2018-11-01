@@ -20,7 +20,7 @@ dat_path = "/home/hgsensor/Applications/clean_room_monitor/data/"
 
 dat = []
 file_list = sorted([f for f in os.listdir(dat_path) \
-            if (os.path.isfile(os.path.join(dat_path, f)) and ('.txt' in f))])
+            if (os.path.isfile(os.path.join(dat_path, f)) and ('.txt' in f) and ('~' not in f))])
 
 ## Load only last 14 days
 for f in file_list[-14:]:
