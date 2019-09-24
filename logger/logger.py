@@ -73,10 +73,13 @@ class clean_room_monitor(object):
                     cnt05, cnt25 = dc1700.read_particle_counts() # takes 60s of integration time
 
                 ## Determine cleanroom class from particle count per cubic inch
-                if (cnt05/0.0254**3 < 352000 and cnt25/0.0254**3 < 11720):
+                if (cnt05/0.0002831685 < 35200):
+                    iso = 6
+                    clas = 1000
+		elif (cnt05/0.0002831685 < 352000):
                     iso = 7
                     clas = 10000
-                elif (cnt05/0.0254**3 < 3520000 and cnt25/0.0254**3 < 117200):
+                elif (cnt05/0.0002831685 < 3520000):
                     iso = 8
                     clas = 100000
                 else:
